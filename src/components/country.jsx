@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams} from 'react-router-dom';
 
 
-
-function country() {
+function Country({ Query }) {
     const [countries, setCountries] = useState([])
     const [input, setInput] = useState('')
+
     let params = useParams();
 
 
 
+
     const fetchCountries = async () => {
-        const response = await fetch(`https://calendarific.com/api/v2/countries?api_key=8bee5c2e957fb61bfa758cee06f35f9eda1f14a0`);
+        const response = await fetch(`https://calendarific.com/api/v2/countries?api_key=88c2e0307392e372379f2234813cc3d62abb2876`);
         const data = await response.json();
         setCountries(data.response.countries);
         console.log(data.response.countries);
@@ -25,6 +26,7 @@ function country() {
     }
     const handleChoose =  (country) => {
         console.log(country.country_name)
+        Query(country)
     }
     const filteredCountries = countries.filter((country) => 
         country.country_name.toLowerCase().includes(input.toLowerCase())
@@ -49,11 +51,13 @@ function country() {
             >
               <div class="text-blue-800 p-5">{country.country_name}</div>
             </li>
-          ))    
+          ))  
+        
         }
     </div>
+  
     </>
   )
 }
 
-export default country
+export default Country
