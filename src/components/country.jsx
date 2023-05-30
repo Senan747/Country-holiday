@@ -5,6 +5,7 @@ import { useParams} from 'react-router-dom';
 function Country({ Query }) {
     const [countries, setCountries] = useState([])
     const [input, setInput] = useState('')
+ 
 
     let params = useParams();
 
@@ -18,12 +19,14 @@ function Country({ Query }) {
         console.log(data.response.countries);
       };
     useEffect(() => {
-        fetchCountries();
+      fetchCountries();
     }, [params.name])
     
     const handleInputChange = (e) =>{
-        setInput(e.target.value)
+      setInput(e.target.value)
+      console.log(input)
     }
+
     const handleChoose =  (country) => {
         console.log(country.country_name)
         Query(country)
@@ -33,30 +36,29 @@ function Country({ Query }) {
     )
     
   return ( 
-    <>
-    <input 
-      type="search" 
-      class="w-96 p-2 border border-spacing-1 bg-red" 
-      placeholder='Search country'
-      value={input}
-      onChange={handleInputChange}
-    />
-    <div class='w-96 h-96 overflow-y-auto border border-slate-300 hover:border-indigo-300 '>
-        {
-           filteredCountries.map((country) => (
-            <li 
-              class="border border-slate-300 hover:border-indigo-300 cursor-pointer" 
-              key={country.country_name}
-              onClick={() => handleChoose(country)}
-            >
-              <div class="text-blue-800 p-5">{country.country_name}</div>
-            </li>
-          ))  
-        
-        }
+    <div className="flex flex-col m-5">
+      <input 
+        type="search" 
+        className="w-96 p-2 border border-spacing-1" 
+        placeholder='Search country'
+        value={input}
+        onChange={handleInputChange}
+      />
+      <div className='w-96 h-96 overflow-y-auto border border-slate-300 hover:border-indigo-300 '>
+          {
+            filteredCountries.map((country) => (
+              <li 
+                className="border border-slate-300 hover:border-indigo-300 cursor-pointer" 
+                key={country.country_name}
+                onClick={() => handleChoose(country)}
+              >
+                <div className="text-blue-800 p-5">{country.country_name}</div>
+              </li>
+            ))  
+          
+          }
+      </div>
     </div>
-  
-    </>
   )
 }
 
