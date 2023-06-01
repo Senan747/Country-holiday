@@ -1,63 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams} from 'react-router-dom';
+import React from 'react';
+import WorldMap from "react-svg-worldmap";
+import { data } from '../data'
 
-
-function Country({ Query }) {
-    const [countries, setCountries] = useState([])
-    const [input, setInput] = useState('')
- 
-
-    let params = useParams();
-
-
-
-
-    const fetchCountries = async () => {
-        const response = await fetch(`https://calendarific.com/api/v2/countries?api_key=88c2e0307392e372379f2234813cc3d62abb2876`);
-        const data = await response.json();
-        setCountries(data.response.countries);
-        console.log(data.response.countries);
-      };
-    useEffect(() => {
-      fetchCountries();
-    }, [params.name])
-    
-    const handleInputChange = (e) =>{
-      setInput(e.target.value)
-      console.log(input)
+function Country({ setCountryCode }) {
+    const handleCountryClick = (event) => {
+      setCountryCode(event.countryCode)
     }
-
-    const handleChoose =  (country) => {
-        console.log(country.country_name)
-        Query(country)
-    }
-    const filteredCountries = countries.filter((country) => 
-        country.country_name.toLowerCase().includes(input.toLowerCase())
-    )
     
   return ( 
     <div className="flex flex-col m-5">
-      <input 
-        type="search" 
-        className="w-96 p-2 border border-spacing-1" 
-        placeholder='Search country'
-        value={input}
-        onChange={handleInputChange}
+      <WorldMap
+        onClickFunction={handleCountryClick}
+        color="red"
+        title="Top 10 Populous Countries"
+        value-suffix="people"
+        size="lg"
+        data={data}
       />
-      <div className='w-96 h-96 overflow-y-auto border border-slate-300 hover:border-indigo-300 '>
-          {
-            filteredCountries.map((country) => (
-              <li 
-                className="border border-slate-300 hover:border-indigo-300 cursor-pointer" 
-                key={country.country_name}
-                onClick={() => handleChoose(country)}
-              >
-                <div className="text-blue-800 p-5">{country.country_name}</div>
-              </li>
-            ))  
-          
-          }
-      </div>
+      
     </div>
   )
 }
