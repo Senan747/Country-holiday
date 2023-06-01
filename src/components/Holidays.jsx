@@ -1,53 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import MaskedInput from 'react-text-mask'
 
-function Holidays({ country1 }) {
-  const [holidays, setHolidays] = useState([]);
-  const [iso, setIso] = useState('');
-  const [date, setDate] = useState('')
-  let params = useParams();
+function Holidays({ setDate }) {
+  const [inputValue, setInputValue] = useState(null)
 
-  const fetchHolidays = async () => {
-    const response = await fetch(`https://calendarific.com/api/v2/holidays?api_key=88c2e0307392e372379f2234813cc3d62abb2876&country=${country1['iso-3166']}&year=${selectedYear}`);
-    const data = await response.json();
-    setHolidays(data.response.holidays);
-    console.log(data.response.holidays);
-
-  };
-  useEffect(() => {
-    fetchHolidays();
-  }, [country1]);
-
-  console.log(country1);
-
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedDay, setSelectedDay] = useState('');
-  const [selectedYear, setSelectedYear] = useState('')
-
-  const handleDateChange = (e) => {
-    const dateValue = e.target.value;
-    const [year, month, day] = dateValue.split('-'); // Extract year, month, and day parts
-    setSelectedMonth(month);
-    setSelectedDay(day);
-    setSelectedYear(year);
-  };
+  const maskInputChange = (e) => {
+    setInputValue(e.target.value)
+  }
+  const handleSubmit = e => {
+    e.preventDefault()
+    setDate(inputValue)
+  }
   return (
     <div className='m-5'>
       <div>
-        <input type="search" />
+         <form onSubmit={handleSubmit}>
+          <MaskedInput
+              className='border border-black'
+              mask={[/[1-2]/, /\d/, /\d/, /\d/]}
+              value={inputValue}  
+              onChange={maskInputChange}
+            />
+            <button className='border border-blue-500 text-blue-600 px-2 py-1'>Search</button>
+         </form>
       </div>
       <div>
         <div>
-          <input 
-            type="date" 
-            onChange={handleDateChange} 
-            className="w-96 p-2 border-8 border-spacing-1"
-          />
-          <p className='font-bold text-2xl'>Selected year: {selectedYear}</p>
-          <p className='font-bold text-2xl'>Selected country: {country1.country_name}</p>
+          <p className='font-bold text-2xl'>Selected year: {inputValue}</p>
+          {/* <p className='font-bold text-2xl'>Selected country: {country1.country_name}</p> */}
         </div>
         
-        {holidays && holidays.length > 0 && (
+        {/* {holidays && holidays.length > 0 && (
         <>
           {holidays.map((holiday) => (
             <li className="border-2" key={holiday.id}>
@@ -57,7 +40,7 @@ function Holidays({ country1 }) {
             </li>
           ))}
         </>
-        )}
+        )} */}
 
 
       </div>
